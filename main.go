@@ -8,9 +8,9 @@ import (
 )
 
 type Client struct {
-	*http.Client
-	host string
-	port string
+	client *http.Client
+	host   string
+	port   string
 }
 
 type clientOption func(c *Client) error
@@ -48,7 +48,9 @@ func Port(port int) clientOption {
 }
 
 func NewClient(opts ...clientOption) (*Client, error) {
-	c := &Client{}
+	c := &Client{
+		client: &http.Client{},
+	}
 
 	// Set default port to OS randomly assign a port
 	Port(0)(c)
@@ -68,4 +70,5 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	fmt.Print(conn.host, ":", conn.port)
+
 }
